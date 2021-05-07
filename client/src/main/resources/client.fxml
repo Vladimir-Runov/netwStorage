@@ -1,0 +1,22 @@
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.geometry.Insets.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:controller="ru.runov.client.Controller"
+        xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      prefHeight="400.0" prefWidth="600.0" >
+    <TextArea fx:id="TextCommandLogFromSerer" editable="false" VBox.vgrow="ALWAYS"></TextArea>
+    <TextField fx:id="TextFld" promptText="mess1" />
+    <Button text="send" onAction="#sendMsgAction"/>
+
+</VBox>
