@@ -11,10 +11,34 @@
 
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.geometry.Insets?>
 <VBox fx:controller="ru.runov.client.Controller"
-        xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       prefHeight="400.0" prefWidth="600.0" >
+        <MenuBar>
+            <Menu text="Файл">
+                <MenuItem text="Exit" onAction="#btmMenuExit" />
+            </Menu>
+        </MenuBar>
+    <HBox visible="true">
+        <ComboBox/>
+        <TextField editable="false" HBox.hgrow="ALWAYS"/>
+        <Button text="up" style="-fx-background-color: #8AeAeF;"/>
+    </HBox>
+
+    <HBox style="-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: green;">
+        <TableView fx:id ="TableServ" VBox.vgrow="ALWAYS" style="-fx-background-color: #E6F6E6;">  </TableView>
+        <VBox style="-fx-background-color: #e6e6e6;-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: blue;">
+            <Button text="l "   onAction="#send2Serv"/>
+            <Button text=" r" onAction="#downloadFromSrv"/>
+            <Button text="del" onAction="#cmdDeleteFile" style="-fx-background-color: #FAeAeF;" />
+            <padding>
+                <Insets bottom="2" left="1"></Insets>
+            </padding>
+        </VBox>
+        <TableView fx:id ="TableLocal" VBox.vgrow="ALWAYS" style="-fx-background-color: #e6F6D6;">  </TableView>
+    </HBox>
+
     <TextArea fx:id="TextCommandLogFromSerer" editable="false" VBox.vgrow="ALWAYS"></TextArea>
     <TextField fx:id="TextFld" promptText="mess1" />
     <Button text="send" onAction="#sendMsgAction"/>
