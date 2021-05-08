@@ -1,0 +1,47 @@
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.geometry.Insets.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.geometry.Insets?>
+<VBox fx:controller="ru.runov.client.Controller"
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      prefHeight="400.0" prefWidth="600.0" >
+        <MenuBar>
+            <Menu text="Файл">
+                <MenuItem text="Exit" onAction="#btmMenuExit" />
+            </Menu>
+        </MenuBar>
+    <HBox visible="true">
+        <ComboBox/>
+        <TextField editable="false" HBox.hgrow="ALWAYS"/>
+        <Button text="up" style="-fx-background-color: #8AeAeF;"/>
+        <Button text="TestSer" onAction="#btnOnActionTestSerer"/>
+    </HBox>
+
+    <HBox style="-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: green;">
+        <fx:include fx:id="panelServer" source="filePanelSrv.fxml" HBox.hgrow="ALWAYS"/>
+
+        <VBox style="-fx-background-color: #e6e6e6;-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: blue;">
+            <Button text="l "   onAction="#send2Serv"/>
+            <Button text=" r" onAction="#downloadFromSrv"/>
+            <Button text="del" onAction="#cmdDeleteFile" style="-fx-background-color: #FAeAeF;" />
+            <padding>
+                <Insets bottom="2" left="1"></Insets>
+            </padding>
+        </VBox>
+        <VBox>
+        <TableView fx:id ="panelLocal" VBox.vgrow="ALWAYS" style="-fx-background-color: #e6F6D6;">  </TableView>
+        <TextArea fx:id="TextCommandLogFromSerer" editable="false" HBox.hgrow="ALWAYS" ></TextArea>
+        </VBox>
+
+    </HBox>
+</VBox>
