@@ -4,18 +4,23 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 
 public class NetworkProider {
     private SocketChannel xchannel;
-    private static final String ADDRESS = "localhost";
-    private static final int PORT = 8189;
+//    private static final String ADDRESS = "localhost";
+//    private static final int PORT = 8189;
+    private static final String HOST = System.getProperty("host", "127.0.0.1");
+    private static final int PORT = Integer.parseInt(System.getProperty("port", "8189"));
 
     private CallBackInterface onMessageReceiedCallback;
 
     public NetworkProider(CallBackInterface onMessageReceiedCallback) {
+
         this.onMessageReceiedCallback = onMessageReceiedCallback;
 
         Thread th = new Thread(()->{
@@ -26,10 +31,18 @@ public class NetworkProider {
                      @Override
                      protected void initChannel(SocketChannel socketChannel) throws Exception {
                          xchannel = socketChannel;
-                         socketChannel.pipeline().addLast(new StringDecoder(), new StringEncoder(), new ClientMsgHandlerString(onMessageReceiedCallback));
+                         socketChannel.pipeline().addLast(
+                                 new ProtobufVarint32FrameDecoder(),
+                                 new ProtobufDecoder(TheMessages.TheResponse.getDefaultInstance()),
+                                 new ProtobufVarint32LengthFieldPrepender(),
+                                 new ProtobufEncoder(),
+                                 new ClientHandler());  // onMessageReceiedCallback
+                             //    new StringDecoder(),
+                             //    new StringEncoder(),
+                             //    new ClientMsgHandlerString(onMessageReceiedCallback));
                      }
                  });
-                ChannelFuture cf = bs.connect(ADDRESS, PORT).sync();
+                ChannelFuture cf = bs.connect(HOST, PORT).sync();
                 cf.channel().closeFuture().sync();
              } catch (Exception e) {
                  e.printStackTrace();

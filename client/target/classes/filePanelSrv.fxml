@@ -13,12 +13,17 @@
     <VBox fx:controller="ru.runov.client.FilePanelServerController" alignment="center"
           style="-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: green;"  xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" >
         <HBox >
-            <TextArea text="каталог сервера" style="-fx-background-color: #8AeAeF;" prefHeight="21.0" prefWidth="40.0" disable="true" />
-            <TextArea text="Статус" style="-fx-background-color: #8AeAeF;" prefHeight="21.0" prefWidth="40.0" />
+            <Label alignment="CENTER_LEFT" cache="true" cacheHint="SCALE" prefHeight="30.0" prefWidth="200.0" textAlignment="JUSTIFY" text="Облако" style="-fx-background-color: #8AeAeF;" />
+            <Label text="Статус" style="-fx-background-color: #8AeAeF;" prefHeight="21.0" prefWidth="40.0" />
+
             <Button text="обновить" onAction="#btnOnActionSerRefresh"/>
+            <Button text="Test Client" onAction="#btnOnActionTestClient"/>
+
         </HBox>
         <TableView fx:id ="fileTableServ" VBox.vgrow="ALWAYS" style="-fx-background-color: #E6F6E6;">  </TableView>
-        <TextArea fx:id="TextCommandLogFromSerer" editable="false" VBox.vgrow="ALWAYS"></TextArea>
+    <properties><ctrl><fx:reference source="controller" /></ctrl>
+    </properties>
 
-</VBox>
+        <TextArea fx:id="TextCommandLogFromSerer" editable="false" VBox.vgrow="ALWAYS"></TextArea>
+    </VBox>
 

@@ -11,5 +11,13 @@
 
     <artifactId>client</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>ru.runov</groupId>
+            <artifactId>model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
 
 </project>
