@@ -8,39 +8,48 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.geometry.Insets?>
+
+<?import javafx.scene.text.Font?>
 <VBox fx:controller="ru.runov.client.Controller"
       xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       prefHeight="400.0" prefWidth="600.0" >
-        <MenuBar>
-            <Menu text="Файл">
-                <MenuItem text="Exit" onAction="#btmMenuExit" />
-            </Menu>
-        </MenuBar>
-    <HBox visible="true">
-        <ComboBox/>
-        <TextField editable="false" HBox.hgrow="ALWAYS"/>
-        <Button text="up" style="-fx-background-color: #8AeAeF;"/>
-        <Button text="TestSer" onAction="#btnOnActionTestSerer"/>
-    </HBox>
+
+    <MenuBar>
+        <Menu text="Файл">
+            <MenuItem text="Exit" onAction="#btmMenuExit" />
+        </Menu>
+    </MenuBar>
 
     <HBox style="-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: green;">
         <fx:include fx:id="panelServer" source="filePanelSrv.fxml" HBox.hgrow="ALWAYS"/>
 
         <VBox style="-fx-background-color: #e6e6e6;-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: blue;">
-            <Button text="l "   onAction="#send2Serv"/>
-            <Button text=" r" onAction="#downloadFromSrv"/>
-            <Button text="del" onAction="#cmdDeleteFile" style="-fx-background-color: #FAeAeF;" />
+            <Button text="l "   focusTraversable="false" onAction="#upload2Serv"/>
+            <Button text=" r"   focusTraversable="false" onAction="#downloadFromSrv"/>
+            <Button text="del"  focusTraversable="false" onAction="#cmdDeleteFile" style="-fx-background-color: #FAeAeF;" />
+            <Button layoutX="20.0" layoutY="20.0" mnemonicParsing="false" style="-fx-graphic: url('http://www.kater.kamera24.ru/images/sms_book_gif.gif') " text="Send&#10;Save" onAction="#upload2Serv">
+                <font>
+                    <Font size="20.0" />
+                </font>
+
+            </Button>
             <padding>
                 <Insets bottom="2" left="1"></Insets>
             </padding>
         </VBox>
+
         <VBox>
-        <TableView fx:id ="panelLocal" VBox.vgrow="ALWAYS" style="-fx-background-color: #e6F6D6;">  </TableView>
-        <TextArea fx:id="TextCommandLogFromSerer" editable="false" HBox.hgrow="ALWAYS" ></TextArea>
+            <HBox visible="true">
+                <ComboBox fx:id="diskSelectInput" prefWidth="30" onAction="#btnOnActionSelectDisk"/>
+                <TextField fx:id="pathCurrent" editable="false" HBox.hgrow="ALWAYS"/>
+                <Button text="up" focusTraversable="false" style="-fx-background-color: #8A8A8F;" onAction="#btnOnActionPathUp"/>
+                <Button text="Test Server" onAction="#btnOnActionTestSerer"/>
+            </HBox>
+
+            <TableView fx:id ="panelLocal" VBox.vgrow="ALWAYS" style="-fx-background-color: #e6F6D6;">  </TableView>
+            <TextArea fx:id="TextCommandLogFromSerer" editable="false" HBox.hgrow="ALWAYS" ></TextArea>
         </VBox>
 
     </HBox>

@@ -5,16 +5,17 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.SocketChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -29,6 +30,13 @@ public class Controller implements Initializable {
     TableView TableServ;
     @FXML
     TableView<FileInfoClient> panelLocal;
+    @FXML   //  Co
+    ComboBox<String> diskSelectInput;
+    @FXML
+    TextField pathCurrent;
+
+    @FXML
+    VBox panelServer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,27 +78,61 @@ public class Controller implements Initializable {
         panelLocal.getSortOrder().add(fcolType);
         updateLocalFileList(Paths.get("."));
 
+        panelLocal.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getClickCount() == 2) {
+                    Path p = Paths.get(pathCurrent.getText()).resolve(panelLocal.getSelectionModel().getSelectedItem().getFileName());
+                    if(Files.isDirectory(p))
+                        updateLocalFileList(p);
+                }
+            }
+        });
+        // Combo box Disks A B S D
+        diskSelectInput.getItems().clear();
+        for (Path p: FileSystems.getDefault().getRootDirectories()) {
+            diskSelectInput.getItems().add(p.toString());
+        }
+        diskSelectInput.getSelectionModel().select(0);
+        diskSelectInput.setPrefWidth(30);
+  //      exitBtn.setOnAction(e -> Platform.exit());
+
         provider = new NetworkProider((args -> {
             TextCommandLogFromSerer.appendText((String)args[0]);
         }));
     }
 
     public void updateLocalFileList(Path initPath) {
+        pathCurrent.setText(initPath.normalize().toAbsolutePath().toString());
         panelLocal.getItems().clear();
         try {
             panelLocal.getItems().addAll(Files.list(initPath).map(FileInfoClient::new).collect(Collectors.toList()));
             panelLocal.sort();
+
         } catch (IOException e) {
             //Alert Alert(e.printStackTrace();
         }
 
 
     }
+
     public void sendMsgAction(ActionEvent actionEvent) {
         provider.sendCommand(TextFld.getText());
     }
 
-    public void send2Serv(ActionEvent actionEvent) {
+    public void upload2Serv(ActionEvent actionEvent) {
+        // upl curr file
+        FilePanelServerController ctrlServ = (FilePanelServerController)panelServer.getProperties().get("ctrl");
+        //Controller ctrlLocal = (Controller)panelLocal.getProperties().get("ctrl");
+        if (this.getCurrentPathLocal() == "")  {
+            Alert alrt = new Alert(Alert.AlertType.INFORMATION, "No file selected !", ButtonType.APPLY);
+            alrt.showAndWait();
+            return;
+        }
+        System.out.println(this.getCurrentPathLocal());
+        Path srcPath = Paths.get(this.pathCurrent.getText(), this.getCurrentSelectedFileLocal());
+        System.out.println(srcPath);
+
     }
 
     public void downloadFromSrv(ActionEvent actionEvent) {
@@ -106,4 +148,29 @@ public class Controller implements Initializable {
     public void btnOnActionTestSerer(ActionEvent actionEvent) {
      //   test server
     }
+
+    public void btnOnActionPathUp(ActionEvent actionEvent) {
+        // button UP path in local
+        Path p = Paths.get(pathCurrent.getText()).getParent();
+        if (p != null)
+            updateLocalFileList(p);
+
+    }
+
+    public void btnOnActionSelectDisk(ActionEvent actionEvent) {
+        ComboBox<String > el = (ComboBox<String >)actionEvent.getSource();
+        updateLocalFileList(Paths.get(el.getSelectionModel().getSelectedItem()));
+    }
+
+    public String getCurrentSelectedFileLocal() {
+        if(panelLocal.isFocused())
+            return panelLocal.getSelectionModel().getSelectedItem().getFileName();
+        return "";
+    }
+
+    public String getCurrentPathLocal() {
+        return pathCurrent.getText();
+    }
+
+
 }

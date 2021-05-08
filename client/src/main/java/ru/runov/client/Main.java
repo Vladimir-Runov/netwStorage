@@ -14,7 +14,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/client.fxml"));
 
         primaryStage.setTitle("Runov client");
-        primaryStage.setScene(new Scene(root, 300,300));
+        primaryStage.setScene(new Scene(root, 900,500));
         primaryStage.show();
     }
 

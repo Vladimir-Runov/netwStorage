@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +24,9 @@ public class FilePanelServerController implements Initializable {
     TextArea TextCommandLogFromSerer;  // log (debug) inf from serer
     @FXML
     TableView<FileInfoClient> fileTableServ;
+
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -75,10 +79,13 @@ public class FilePanelServerController implements Initializable {
             fileTableServ.getItems().addAll(Files.list(initPath).map(FileInfoClient::new).collect(Collectors.toList()));
             fileTableServ.sort();
         } catch (IOException e) {
-            //Alert Alert(e.printStackTrace();
+            //Alert alrt = new Alert(e.printStackTrace();
         }
     }
 
     public void btnOnActionSerRefresh(ActionEvent actionEvent) {
+    }
+
+    public void btnOnActionTestClient(ActionEvent actionEvent) {
     }
 }
