@@ -1,8 +1,6 @@
 package ru.runov.client;
 
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +9,6 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,16 +16,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class Controller implements Initializable {
+public class FilePanelServerController implements Initializable {
+
     private NetworkProider provider;
     @FXML
-    TextField TextFld;
+    TextArea TextCommandLogFromSerer;  // log (debug) inf from serer
     @FXML
-    TextArea TextCommandLogFromSerer;
-    @FXML
-    TableView TableServ;
-    @FXML
-    TableView<FileInfoClient> panelLocal;
+    TableView<FileInfoClient> fileTableServ;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,9 +59,9 @@ public class Controller implements Initializable {
             };
         });
 
-        panelLocal.getColumns().addAll(fcolType,fcolName,fcolSize,fcolDate);
+        fileTableServ.getColumns().addAll(fcolType,fcolName,fcolSize,fcolDate);
 
-        panelLocal.getSortOrder().add(fcolType);
+        fileTableServ.getSortOrder().add(fcolType);
         updateLocalFileList(Paths.get("."));
 
         provider = new NetworkProider((args -> {
@@ -76,34 +70,15 @@ public class Controller implements Initializable {
     }
 
     public void updateLocalFileList(Path initPath) {
-        panelLocal.getItems().clear();
+        fileTableServ.getItems().clear();
         try {
-            panelLocal.getItems().addAll(Files.list(initPath).map(FileInfoClient::new).collect(Collectors.toList()));
-            panelLocal.sort();
+            fileTableServ.getItems().addAll(Files.list(initPath).map(FileInfoClient::new).collect(Collectors.toList()));
+            fileTableServ.sort();
         } catch (IOException e) {
             //Alert Alert(e.printStackTrace();
         }
-
-
-    }
-    public void sendMsgAction(ActionEvent actionEvent) {
-        provider.sendCommand(TextFld.getText());
     }
 
-    public void send2Serv(ActionEvent actionEvent) {
-    }
-
-    public void downloadFromSrv(ActionEvent actionEvent) {
-    }
-
-    public void cmdDeleteFile(ActionEvent actionEvent) {
-    }
-
-    public void btmMenuExit(ActionEvent actionEvent) {
-        Platform.exit();
-    }
-
-    public void btnOnActionTestSerer(ActionEvent actionEvent) {
-     //   test server
+    public void btnOnActionSerRefresh(ActionEvent actionEvent) {
     }
 }

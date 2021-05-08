@@ -24,10 +24,12 @@
         <ComboBox/>
         <TextField editable="false" HBox.hgrow="ALWAYS"/>
         <Button text="up" style="-fx-background-color: #8AeAeF;"/>
+        <Button text="TestSer" onAction="#btnOnActionTestSerer"/>
     </HBox>
 
     <HBox style="-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: green;">
-        <TableView fx:id ="TableServ" VBox.vgrow="ALWAYS" style="-fx-background-color: #E6F6E6;">  </TableView>
+        <fx:include fx:id="panelServer" source="filePanelSrv.fxml" HBox.hgrow="ALWAYS"/>
+
         <VBox style="-fx-background-color: #e6e6e6;-fx-padding:7;-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 3;-fx-border-radius: 3;-fx-border-color: blue;">
             <Button text="l "   onAction="#send2Serv"/>
             <Button text=" r" onAction="#downloadFromSrv"/>
@@ -36,11 +38,10 @@
                 <Insets bottom="2" left="1"></Insets>
             </padding>
         </VBox>
-        <TableView fx:id ="TableLocal" VBox.vgrow="ALWAYS" style="-fx-background-color: #e6F6D6;">  </TableView>
+        <VBox>
+        <TableView fx:id ="panelLocal" VBox.vgrow="ALWAYS" style="-fx-background-color: #e6F6D6;">  </TableView>
+        <TextArea fx:id="TextCommandLogFromSerer" editable="false" HBox.hgrow="ALWAYS" ></TextArea>
+        </VBox>
+
     </HBox>
-
-    <TextArea fx:id="TextCommandLogFromSerer" editable="false" VBox.vgrow="ALWAYS"></TextArea>
-    <TextField fx:id="TextFld" promptText="mess1" />
-    <Button text="send" onAction="#sendMsgAction"/>
-
 </VBox>

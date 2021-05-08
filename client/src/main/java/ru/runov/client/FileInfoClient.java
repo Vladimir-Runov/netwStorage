@@ -24,6 +24,11 @@ public class FileInfoClient {
     private String fileName;
     private FileType type;
     private long size;
+
+    public LocalDateTime getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
     private LocalDateTime lastModifiedTime;
 
     public String getFileName() {
