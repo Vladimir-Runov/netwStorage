@@ -116,9 +116,9 @@ public class Controller implements Initializable {
 
     }
 
-    public void sendMsgAction(ActionEvent actionEvent) {
-        provider.sendCommand(TextFld.getText());
-    }
+//    public void sendMsgAction(ActionEvent actionEvent) {
+//        provider.sendCommand(TextFld.getText());
+//    }
 
     public void upload2Serv(ActionEvent actionEvent) {
         // upl curr file
@@ -131,7 +131,12 @@ public class Controller implements Initializable {
         }
         System.out.println(this.getCurrentPathLocal());
         Path srcPath = Paths.get(this.pathCurrent.getText(), this.getCurrentSelectedFileLocal());
-        System.out.println(srcPath);
+
+//        System.out.println(srcPath);
+
+        provider.uploadFile(srcPath);
+
+        //ctrlServ.sendRequest
 
     }
 
@@ -163,9 +168,9 @@ public class Controller implements Initializable {
     }
 
     public String getCurrentSelectedFileLocal() {
-        if(panelLocal.isFocused())
+       // if(panelLocal.isFocused())
             return panelLocal.getSelectionModel().getSelectedItem().getFileName();
-        return "";
+        //return "";
     }
 
     public String getCurrentPathLocal() {

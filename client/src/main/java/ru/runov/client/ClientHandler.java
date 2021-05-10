@@ -1,31 +1,59 @@
 package ru.runov.client;
 
 //import com.google.protobuf.ByteString;
+//import TheMessages;
+import com.google.protobuf.ByteString;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+//import ru.runov.server.TheMessages;
+//import ru.runov.TheMessages;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import ru.runov.protobuf.*;
+//import ru.runov.clientcommon.* protobuf.*;
 
-public class ClientHandler extends SimpleChannelInboundHandler<TheMessages.DemoResponse> {
-
+public class ClientHandler extends SimpleChannelInboundHandler<TheMessages.TheResponse> {
+    private CallBackInterface onMessageReceiedCallback;
     private Channel channel;
+
     private TheMessages.TheResponse resp;
     private final BlockingQueue<TheMessages.TheResponse> resps = new LinkedBlockingQueue<TheMessages.TheResponse>();
 
-    public TheMessages.TheResponse sendRequest(TheMessages.Type type) {
+    public ClientHandler(CallBackInterface onMessageReceiedCallback) {
+        this.onMessageReceiedCallback = onMessageReceiedCallback;
+    }
+
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) {
+        channel = ctx.channel();
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, TheMessages.TheResponse msg) throws Exception {
+        System.out.println(msg.toString());
+        resps.add(msg);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        cause.printStackTrace();
+        ctx.close();
+    }
+
+    public TheMessages.TheResponse sendRequest(TheMessages.Type type, Path p) {
 
         TheMessages.TheRequest req = null;
         // send File request
         if (TheMessages.Type.FILE == type) {
             InputStream inputStream = null;
             try {
-                inputStream = getClass().getResourceAsStream("/components.png");
+                inputStream = getClass().getResourceAsStream("f:/components.png");
 
                 TheMessages.FileMsg fileMsg = TheMessages.FileMsg.newBuilder()
                         .setFileBytes(ByteString.readFrom(inputStream))
@@ -73,20 +101,5 @@ public class ClientHandler extends SimpleChannelInboundHandler<TheMessages.DemoR
         return resp;
     }
 
-    @Override
-    public void channelRegistered(ChannelHandlerContext ctx) {
-        channel = ctx.channel();
-    }
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TheMessages.DemoResponse msg)
-            throws Exception {
-        resps.add(msg);
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        ctx.close();
-    }
 }
+

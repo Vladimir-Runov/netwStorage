@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class CannelFileOperation {
     public static void client_sendFile(Channel  channel, Path p, long readLength)  throws IOException {
-
+/*
             File file = new File(p);
             FileInputStream fis = new FileInputStream(file);
             int count = 0;
@@ -22,12 +22,13 @@ public class CannelFileOperation {
                 sendToServer(bytes, channel, readNum);
                 System.out.println("Send count: " + ++count);
             }
+  */
         }
 
     private static void sendToServer(byte[] bytes, Channel channel, int length) throws IOException {
-        ChannelBuffer buffer = ChannelBuffers.copiedBuffer(bytes, 0, length);
-        channel.write(buffer);
+      //  ChannelBuffer buffer = ChannelBuffers.copiedBuffer(bytes, 0, length);
+      //  channel.write(buffer);
     }
 
 }
-}
+

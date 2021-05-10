@@ -30,6 +30,8 @@ public class FilePanelServerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // get list of files from mySQL
+
         TableColumn<FileInfoClient, String> fcolType = new TableColumn<>();
         fcolType.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getType().getName()));
         fcolType.setPrefWidth(10);
@@ -66,7 +68,7 @@ public class FilePanelServerController implements Initializable {
         fileTableServ.getColumns().addAll(fcolType,fcolName,fcolSize,fcolDate);
 
         fileTableServ.getSortOrder().add(fcolType);
-        updateLocalFileList(Paths.get("."));
+        updateLocalFileList(Paths.get("./ServerCache"));
 
         provider = new NetworkProider((args -> {
             TextCommandLogFromSerer.appendText((String)args[0]);
