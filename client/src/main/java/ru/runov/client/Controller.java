@@ -136,7 +136,7 @@ public class Controller implements Initializable {
 
         provider.uploadFile(srcPath);
 
-        //ctrlServ.sendRequest
+        ctrlServ.btnOnActionSerRefresh(null);
 
     }
 

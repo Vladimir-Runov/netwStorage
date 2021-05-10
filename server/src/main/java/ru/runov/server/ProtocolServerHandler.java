@@ -32,8 +32,9 @@ public class ProtocolServerHandler //implements ChannelHandler {
     protected void channelRead0(ChannelHandlerContext ctx, TheMessages.TheRequest msg) throws Exception {
         if (msg.getType() == TheMessages.Type.MSG) {
             TheMessages.TheResponse.Builder builder = TheMessages.TheResponse.newBuilder();
-            String message = "Accepted from Server, returning response";
+            String message = "MSG Accepted from Server, returning response";
             System.out.println(message);
+
             builder.setResponseMsg(message)
                     .setCode(0);
             ctx.write(builder.build());
@@ -56,45 +57,8 @@ public class ProtocolServerHandler //implements ChannelHandler {
                 }
             }
             TheMessages.TheResponse.Builder builder = TheMessages.TheResponse.newBuilder();
-            String message = "File saved to: " + FILE_DIR;
-            System.out.println(message);
-            builder.setResponseMsg(message)
-                    .setCode(0);
-            ctx.write(builder.build());
-        } else {
-            TheMessages.TheResponse.Builder builder = TheMessages.TheResponse.newBuilder();
-            String message = "Unsupported message type " + msg.getType();
-            System.out.println(message);
-            builder.setResponseMsg(message)
-                    .setCode(1);
-            ctx.write(builder.build());
-        }if (msg.getType() == TheMessages.Type.MSG) {
-            TheMessages.TheResponse.Builder builder = TheMessages.TheResponse.newBuilder();
-            String message = "Accepted from Server, returning response";
-            System.out.println(message);
-            builder.setResponseMsg(message)
-                    .setCode(0);
-            ctx.write(builder.build());
-        } else if (msg.getType() == TheMessages.Type.FILE) {
 
-            byte[] bFile = msg.getFile().toByteArray();
-            FileOutputStream fileOuputStream = null;
-            try {
-                fileOuputStream = new FileOutputStream(FILE_DIR + msg.getFile().getFilename());
-                fileOuputStream.write(bFile);
-            } catch (Exception e) {
-                System.out.println(e);
-            } finally {
-                try {
-                    if (fileOuputStream != null) {
-                        fileOuputStream.close();
-                    }
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-            }
-            TheMessages.TheResponse.Builder builder = TheMessages.TheResponse.newBuilder();
-            String message = "File saved to: " + FILE_DIR;
+            String message = "Ok! File saved to: " + FILE_DIR;
             System.out.println(message);
             builder.setResponseMsg(message)
                     .setCode(0);

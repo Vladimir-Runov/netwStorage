@@ -23,7 +23,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TheMessages.TheRe
     private Channel channel;
 
     private TheMessages.TheResponse resp;
-    private final BlockingQueue<TheMessages.TheResponse> resps = new LinkedBlockingQueue<TheMessages.TheResponse>();
+    public final BlockingQueue<TheMessages.TheResponse> resps = new LinkedBlockingQueue<TheMessages.TheResponse>();
 
     public ClientHandler(CallBackInterface onMessageReceiedCallback) {
         this.onMessageReceiedCallback = onMessageReceiedCallback;
@@ -36,7 +36,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TheMessages.TheRe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TheMessages.TheResponse msg) throws Exception {
-        System.out.println(msg.toString());
+        System.out.println("channelRead0 " + msg.toString());
         resps.add(msg);
     }
 
@@ -82,6 +82,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TheMessages.TheRe
                     .setType(TheMessages.Type.MSG)
                     .setRequestMsg("From Client").build();
         }
+
         // Send request
         channel.writeAndFlush(req);
 

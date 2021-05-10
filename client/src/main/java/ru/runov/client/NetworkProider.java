@@ -19,7 +19,7 @@ public class NetworkProider {
     private static final int PORT = Integer.parseInt(System.getProperty("port", "8189"));  //    private static final int PORT = 8189;
 
     private SocketChannel xchannel;
-
+    private ClientHandler clHandler;
     public NetworkProider(CallBackInterface onMessageReceiedCallback) {
         Thread th = new Thread(()->{
              EventLoopGroup elgWorker = new NioEventLoopGroup();
@@ -29,13 +29,15 @@ public class NetworkProider {
                      @Override
                      protected void initChannel(SocketChannel socketChannel) throws Exception {
                          xchannel = socketChannel;
+                         clHandler = new ClientHandler(onMessageReceiedCallback);
                          socketChannel.pipeline().addLast(
                                  new ProtobufVarint32FrameDecoder(),
                                  new ProtobufDecoder(TheMessages.TheResponse.getDefaultInstance()),
 
                                  new ProtobufVarint32LengthFieldPrepender(),
                                  new ProtobufEncoder(),
-                                 new ClientHandler(onMessageReceiedCallback));  // onMessageReceiedCallback
+                                 clHandler);
+                             //    new ClientHandler(onMessageReceiedCallback));  // onMessageReceiedCallback
                              //    new StringDecoder(),
                              //    new StringEncoder(),
                              //    new ClientMsgHandlerString(onMessageReceiedCallback));
@@ -56,25 +58,23 @@ public class NetworkProider {
         th.start();
     }
     public void uploadFile(Path p) {
-        System.out.println("x-> " + p.toFile().toString());
-        TheMessages.Type type = TheMessages.Type.FILE;
-        // xchannel.writeAndFlush(TheMessages.Type.FILE, p);
         TheMessages.TheRequest req = null;
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(p.toFile());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        // BufferedInputStream
-        InputStream inputStream = new BufferedInputStream(fis);
+        TheMessages.Type type = TheMessages.Type.FILE;        // xchannel.writeAndFlush(TheMessages.Type.FILE, p);
 
         // send File request
         if (TheMessages.Type.FILE == type) {
            // InputStream inputStream = null;
+            System.out.println("x-> " + p.toFile().toString());
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(p.toFile());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            // BufferedInputStream
+            InputStream inputStream = new BufferedInputStream(fis);
             try {
                // inputStream = getClass().getResourceAsStream(p.toFile().toString());
-
                 TheMessages.FileMsg fileMsg = TheMessages.FileMsg.newBuilder()
                         .setFileBytes(ByteString.readFrom(inputStream))
                         .setFilename(p.toFile().getName())
@@ -100,25 +100,26 @@ public class NetworkProider {
             // send message request.
             req = TheMessages.TheRequest.newBuilder()
                     .setType(TheMessages.Type.MSG)
-                    .setRequestMsg("From Client").build();
+                    .setRequestMsg("From Client.......{ĂÎ}").build();
+            // Send request
+            xchannel.writeAndFlush(req);
         }
-        // Send request
-        xchannel.writeAndFlush(req);
 
         // Now wait for response from server
-//        boolean interrupted = false;
-//        for (; ; ) {
-//            try {
-//                resp = resps.take();
-//                break;
-//            } catch (InterruptedException ignore) {
-//                interrupted = true;
-//            }
-//        }
-//        if (interrupted) {
-//            Thread.currentThread().interrupt();
-//        }
-//        return resp;
+        boolean interrupted = false;
+        for (; ; ) {
+            try {
+                TheMessages.TheResponse resp = clHandler.resps.take();
+                System.out.println("TheResponse...");
+                break;
+            } catch (InterruptedException ignore) {
+                interrupted = true;
+                System.out.println("input stream close ");
+            }
+        }
+        if (interrupted) {
+            Thread.currentThread().interrupt();
+        }
         return;
     }
 

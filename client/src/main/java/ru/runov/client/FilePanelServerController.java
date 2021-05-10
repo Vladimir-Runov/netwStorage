@@ -86,6 +86,7 @@ public class FilePanelServerController implements Initializable {
     }
 
     public void btnOnActionSerRefresh(ActionEvent actionEvent) {
+        updateLocalFileList(Paths.get("./ServerCache"));
     }
 
     public void btnOnActionTestClient(ActionEvent actionEvent) {
