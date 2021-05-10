@@ -66,17 +66,18 @@ public class NetworkProider {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        BufferedInputStream bis = new BufferedInputStream(fis);
+        // BufferedInputStream
+        InputStream inputStream = new BufferedInputStream(fis);
 
         // send File request
         if (TheMessages.Type.FILE == type) {
-            InputStream inputStream = null;
+           // InputStream inputStream = null;
             try {
-                inputStream = getClass().getResourceAsStream(p.toFile().toString());
+               // inputStream = getClass().getResourceAsStream(p.toFile().toString());
 
                 TheMessages.FileMsg fileMsg = TheMessages.FileMsg.newBuilder()
                         .setFileBytes(ByteString.readFrom(inputStream))
-                        .setFilename("components.png")
+                        .setFilename(p.toFile().getName())
                         .build();
                 req = TheMessages.TheRequest.newBuilder()
                         .setType(TheMessages.Type.FILE)

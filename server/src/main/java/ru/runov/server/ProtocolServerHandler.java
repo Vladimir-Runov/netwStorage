@@ -1,7 +1,7 @@
 package ru.runov.server;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
-import ru.runov.*;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ProtocolServerHandler //implements ChannelHandler {
                                      extends SimpleChannelInboundHandler<TheMessages.TheRequest> {
 
-    private static final String FILE_DIR = "/tmp/";
+    private static final String FILE_DIR = "ServerCache/";
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -29,7 +29,7 @@ public class ProtocolServerHandler //implements ChannelHandler {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, TheMessages.TheRequest theRequest) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, TheMessages.TheRequest msg) throws Exception {
         if (msg.getType() == TheMessages.Type.MSG) {
             TheMessages.TheResponse.Builder builder = TheMessages.TheResponse.newBuilder();
             String message = "Accepted from Server, returning response";
